@@ -33,9 +33,6 @@ const store = createStore({
     },
   },
   actions: {
-    async fetchProducts({ commit }) {
-      // fetch products logic
-    },
     async login({ commit }, credentials) {
       // login logic
     },

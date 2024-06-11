@@ -1,19 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: 'https://fakestoreapi.com',
+  baseURL: "https://fakestoreapi.com",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 export const getAllProducts = async () => {
   try {
-    const response = await apiClient.get('/products');
+    const response = await apiClient.get("/products");
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     return [];
   }
 };
@@ -23,7 +23,7 @@ export const getProductById = async (id) => {
     const response = await apiClient.get(`/products/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching product by ID:', error);
+    console.error("Error fetching product by ID:", error);
     return null;
   }
 };
