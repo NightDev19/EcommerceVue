@@ -1,33 +1,33 @@
 <template>
+    <!-- 🏠 Hero Section -->
     <section
-        class="relative bg-gradient-to-r from-blue-50 via-white to-blue-50 flex flex-col items-center justify-center text-center px-6 py-24 md:py-32"
+        class="relative min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-br from-blue-50 via-white to-blue-100 overflow-hidden px-6"
     >
-        <!-- 🏠 Hero Section -->
-        <div class="max-w-2xl">
+        <div class="max-w-2xl z-10">
             <h1
-                class="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight mb-4"
+                class="text-5xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-4"
             >
                 Welcome to <span class="text-blue-600">ShopSmart</span>
             </h1>
-            <p class="text-lg md:text-xl text-gray-600 mb-8">
-                Discover top-quality products at unbeatable prices. Shop smart —
-                shop better.
+            <p class="text-lg md:text-xl text-gray-600 mb-10">
+                Explore top-quality products at unbeatable prices. Smart
+                shopping starts here.
             </p>
 
             <router-link
                 to="/products"
-                class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
+                class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg shadow-lg hover:bg-blue-700 transition-transform transform hover:-translate-y-1"
             >
                 🛒 Start Shopping
             </router-link>
         </div>
 
-        <!-- Decorative Background Shapes -->
+        <!-- Background Decorative Shapes -->
         <div
-            class="absolute top-0 left-0 w-48 h-48 bg-blue-100 rounded-full blur-3xl opacity-50 -z-10"
+            class="absolute top-10 left-10 w-56 h-56 bg-blue-100 rounded-full blur-3xl opacity-40 animate-pulse -z-10"
         ></div>
         <div
-            class="absolute bottom-0 right-0 w-56 h-56 bg-blue-200 rounded-full blur-3xl opacity-40 -z-10"
+            class="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-40 animate-pulse -z-10"
         ></div>
     </section>
 
@@ -38,12 +38,14 @@
         </h2>
 
         <!-- Loader -->
-        <div v-if="loading" class="text-center text-gray-500">Loading...</div>
+        <div v-if="loading" class="text-center text-gray-500 text-lg">
+            Loading...
+        </div>
 
         <!-- Product Grid -->
         <div
             v-else
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-7xl mx-auto"
         >
             <div
                 v-for="product in recommended"
@@ -53,7 +55,7 @@
                 <img
                     :src="product.image"
                     :alt="product.title"
-                    class="w-full h-40 object-contain mb-3"
+                    class="w-full h-48 object-contain mb-3"
                 />
                 <h3
                     class="text-sm font-semibold text-gray-700 mb-1 line-clamp-2"
@@ -85,7 +87,7 @@ export default {
         onMounted(async () => {
             try {
                 const products = await getAllProducts();
-                // Shuffle and pick a few random ones
+                // Random 6 recommended items
                 recommended.value = products
                     .sort(() => 0.5 - Math.random())
                     .slice(0, 5);
@@ -102,6 +104,7 @@ export default {
 </script>
 
 <style scoped>
+/* Smooth fade-in animation for page load */
 section {
     animation: fadeIn 0.8s ease-in-out;
 }
@@ -115,5 +118,21 @@ section {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Pulse animation for background shapes */
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+}
+.animate-pulse {
+    animation: pulse 6s ease-in-out infinite;
 }
 </style>
