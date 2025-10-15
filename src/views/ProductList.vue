@@ -1,44 +1,45 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-4xl font-bold mb-6">Product List</h1>
-    <div v-if="loading">Loading...</div>
-    <div
-      v-else
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-    >
-      <ProductCard
-        v-for="product in products"
-        :key="product.id"
-        :product="product"
-      />
+    <div class="p-6">
+        <h1 class="text-3xl font-bold mb-6">Product List</h1>
+
+        <select v-model="category" class="mb-6 border rounded-lg px-3 py-2">
+            <option value="">All Categories</option>
+            <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+        </select>
+
+        <div v-if="loading">Loading...</div>
+
+        <div
+            v-else
+            class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
+            <ProductCard v-for="p in filtered" :key="p.id" :product="p" />
+        </div>
     </div>
-  </div>
 </template>
 
-<script>
-import { ref, onMounted } from "vue";
+<script setup>
+import { ref, computed, onMounted } from "vue";
 import { getAllProducts } from "../assets/api";
 import ProductCard from "../components/ProductCard.vue";
 
-export default {
-  name: "ProductList",
-  components: {
-    ProductCard,
-  },
-  setup() {
-    const products = ref([]);
-    const loading = ref(true);
+const products = ref([]);
+const loading = ref(true);
+const category = ref("");
+const categories = ref([]);
 
-    onMounted(async () => {
-      products.value = await getAllProducts();
-      loading.value = false;
-    });
+onMounted(async () => {
+    const data = await getAllProducts();
+    products.value = data;
+    categories.value = [
+        ...new Set(data.map((p) => p.category || "Uncategorized")),
+    ];
+    loading.value = false;
+});
 
-    return { products, loading };
-  },
-};
+const filtered = computed(() =>
+    category.value
+        ? products.value.filter((p) => p.category === category.value)
+        : products.value,
+);
 </script>
-
-<style scoped>
-/* Add styles for the product list page here */
-</style>
